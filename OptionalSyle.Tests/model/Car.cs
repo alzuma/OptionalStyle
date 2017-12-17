@@ -1,4 +1,4 @@
-﻿namespace OptionalSyle.Tests
+﻿namespace OptionalSyle.Tests.model
 {
     internal class Car
     {

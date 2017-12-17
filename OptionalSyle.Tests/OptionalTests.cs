@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using OptionalStyle;
+using OptionalSyle.Tests.model;
 using Shouldly;
 using Xunit;
 
