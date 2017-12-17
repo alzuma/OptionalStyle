@@ -6,6 +6,8 @@
     <Description></Description>
     <PackageProjectUrl>https://github.com/alzuma/OptionalStyle</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/alzuma/OptionalStyle/blob/master/LICENSE</PackageLicenseUrl>
+    <Authors>alzuma</Authors>
+    <Company />
   </PropertyGroup>
 
 </Project>
