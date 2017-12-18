@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using OptionalStyle.exceptions;
 
 namespace OptionalStyle
 {
@@ -21,6 +22,20 @@ namespace OptionalStyle
         public static Optional<T> Empty()
         {
             return new Optional<T>(new T[0]);
+        }
+
+        public T Get()
+        {
+            if (!IsPresent())
+            {
+                throw new OptionalValueNotSetException();
+            }
+            return _data[0];
+        }
+
+        public Optional<T> Map(Func<T, Optional<T>> mapFunc)
+        {
+            return !IsPresent() ? Empty() : mapFunc(_data[0]);
         }
 
         public bool IsPresent()

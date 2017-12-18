@@ -8,6 +8,7 @@
     <PackageLicenseUrl>https://github.com/alzuma/OptionalStyle/blob/master/LICENSE</PackageLicenseUrl>
     <Authors>alzuma</Authors>
     <Company />
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using OptionalStyle;
+using OptionalStyle.exceptions;
 using OptionalSyle.Tests.model;
 using Shouldly;
 using Xunit;
@@ -87,10 +88,47 @@ namespace OptionalSyle.Tests
         }
 
         [Fact]
-        public void ValueOfNull()
+        public void ValueOf_PassNull_IsPresentShouldBeNull()
         {
             var car = Optional<Car>.ValueOf(null);
             car.IsPresent().ShouldBe(false);
+        }
+
+        [Fact]
+        public void Map_ChangeKiaToOpel_NameShouldBeOpel()
+        {
+            var car = Optional<Car>.ValueOf(new Car {Name = "kia"});
+
+            var mapKiaToOpel = car.Map(c =>
+            {
+                c.Name = "opel";
+                return Optional<Car>.ValueOf(c);
+            });
+
+            mapKiaToOpel.IsPresent().ShouldBeTrue();
+            mapKiaToOpel.Get().Name.ShouldBe("opel");
+        }
+
+        [Fact]
+        public void Map_MapOnEmpty_IsPresentShouldBeFalse()
+        {
+            var car = Optional<Car>.Empty();
+            var emptyCar = car.Map(c => Optional<Car>.ValueOf(new Car()));
+            emptyCar.IsPresent().ShouldBeFalse();
+        }
+
+        [Fact]
+        public void Get_ReturnsCar_ShouldReturnOpel()
+        {
+            var car = Optional<Car>.ValueOf(new Car {Name = "opel"});
+            car.Get().Name.ShouldBe("opel");
+        }
+
+        [Fact]
+        public void Get_EmptyCar_ShouldThrowException()
+        {
+            var car = Optional<Car>.Empty();
+            Should.Throw<OptionalValueNotSetException>(() => car.Get());
         }
     }
 }
