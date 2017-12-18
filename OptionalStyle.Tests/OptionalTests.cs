@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using OptionalStyle;
 using OptionalStyle.exceptions;
-using OptionalSyle.Tests.model;
+using OptionalStyle.Tests.model;
 using Shouldly;
 using Xunit;
 
-namespace OptionalSyle.Tests
+namespace OptionalStyle.Tests
 {
     public class OptionalTests
     {

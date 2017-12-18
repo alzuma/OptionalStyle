@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionalStyle", "OptionalStyle\OptionalStyle.csproj", "{4707060F-0CF8-483E-8B9A-A2AD57891C4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionalStyle", "OptionalStyle\OptionalStyle.csproj", "{4707060F-0CF8-483E-8B9A-A2AD57891C4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionalSyle.Tests", "OptionalSyle.Tests\OptionalSyle.Tests.csproj", "{92C694E3-E139-4ABC-9998-BE7F4A00F42B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptionalStyle.Tests", "OptionalStyle.Tests\OptionalStyle.Tests.csproj", "{92C694E3-E139-4ABC-9998-BE7F4A00F42B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
