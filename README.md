@@ -1,7 +1,9 @@
 # OptionalStyle
 
+Use case #1.
+If connection is empty, create new
 ```csharp
-private Optional<IOrientDatabaseConnection> _connection;
+private Optional<IOrientDatabaseConnection> _connection = Optional<IOrientDatabaseConnection>.Empty();
 
 public IOrientDatabaseConnection GetConnection()
 {
