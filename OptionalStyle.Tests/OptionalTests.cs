@@ -76,14 +76,14 @@ namespace OptionalStyle.Tests
         public void OrElseThrowsException()
         {
             var car = Optional<Car>.Empty();
-            Should.Throw<Exception>(() => car.OrElseThrow(new Exception()));
+            Should.Throw<Exception>(() => car.OrElseThrow(() => new Exception()));
         }
 
         [Fact]
         public void OrElseDoesNotThrowsException()
         {
             var car = Optional<Car>.ValueOf(new Car());
-            car.OrElseThrow(new Exception());
+            car.OrElseThrow(() => new Exception());
         }
 
         [Fact]

@@ -61,11 +61,11 @@ namespace OptionalStyle
             return IsPresent() ? _data[0] : function();
         }
 
-        public T OrElseThrow(Exception e)
+        public T OrElseThrow(Func<Exception> e)
         {
             if (!IsPresent())
             {
-                throw e;
+                throw e();
             }
             return _data[0];
         }
