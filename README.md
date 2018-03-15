@@ -1,5 +1,9 @@
 # OptionalStyle
 
+```
+Install-Package OptionalStyle
+```
+
 Use case #1.
 If connection is empty, create new
 ```csharp
