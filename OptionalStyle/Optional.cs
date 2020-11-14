@@ -110,5 +110,14 @@ namespace OptionalStyle
 
             return _value;
         }
+        
+        public T OrElseThrow<TException>() where TException: Exception, new()
+        {
+            if (!IsPresent())
+            {
+                throw new TException();
+            }
+            return _value;
+        }
     }
 }

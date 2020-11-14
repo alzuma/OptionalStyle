@@ -10,6 +10,21 @@ namespace OptionalStyle.Tests
     public class OptionalTests
     {
         [Fact]
+        public void Map_MapChainedWithExceptionFromGenericType_ShouldThrowArgumentException()
+        {
+            var car = Optional<Car>.OfNullable(null);
+
+            ShouldThrowExtensions.ShouldThrow<ArgumentException>(() =>
+            {
+                car.Map(c =>
+                {
+                    c.Name = "new Car";
+                    return c;
+                }).OrElseThrow<ArgumentException>();
+            });
+        }
+
+        [Fact]
         public void Map_MapChainedWithException_ShouldThrowArgumentException()
         {
             var car = Optional<Car>.OfNullable(null);
@@ -23,7 +38,7 @@ namespace OptionalStyle.Tests
                 }).OrElseThrow(() => new ArgumentException());
             });
         }
-        
+
         [Fact]
         public async Task MapAsync_ConvertCarToCell_ShouldBeSuccess()
         {
@@ -31,7 +46,7 @@ namespace OptionalStyle.Tests
             var cell = await car.Map(async c => await Task.FromResult(new Cell {Name = c.Name}));
             cell.Get().Name.ShouldBe("Rocket");
         }
-        
+
         [Fact]
         public void Map_ConvertCarToCell_ShouldBeSuccess()
         {
