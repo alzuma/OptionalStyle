@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using OptionalStyle.exceptions;
 using OptionalStyle.Tests.model;
 using Shouldly;
@@ -10,9 +10,40 @@ namespace OptionalStyle.Tests
     public class OptionalTests
     {
         [Fact]
+        public void Map_MapChainedWithException_ShouldThrowArgumentException()
+        {
+            var car = Optional<Car>.OfNullable(null);
+
+            ShouldThrowExtensions.ShouldThrow<ArgumentException>(() =>
+            {
+                car.Map(c =>
+                {
+                    c.Name = "new Car";
+                    return c;
+                }).OrElseThrow(() => new ArgumentException());
+            });
+        }
+        
+        [Fact]
+        public async Task MapAsync_ConvertCarToCell_ShouldBeSuccess()
+        {
+            var car = Optional.Of(new Car {Name = "Rocket"});
+            var cell = await car.Map(async c => await Task.FromResult(new Cell {Name = c.Name}));
+            cell.Get().Name.ShouldBe("Rocket");
+        }
+        
+        [Fact]
+        public void Map_ConvertCarToCell_ShouldBeSuccess()
+        {
+            var car = Optional.Of(new Car {Name = "Rocket"});
+            var cell = car.Map(c => new Cell {Name = c.Name}).Get();
+            cell.Name.ShouldBe("Rocket");
+        }
+
+        [Fact]
         public void IsPresent_ShouldBeTrue()
         {
-            var car = Optional<Car>.Of(new Car());
+            var car = Optional.Of(new Car());
             car.IsPresent().ShouldBe(true);
         }
 
@@ -26,8 +57,8 @@ namespace OptionalStyle.Tests
         [Fact]
         public void OrElseObjectSelf()
         {
-            var car = Optional<Car>.Of(new Car { Name = "opel" });
-            var opel = car.OrElse(new Car { Name = "audi" });
+            var car = Optional<Car>.Of(new Car {Name = "opel"});
+            var opel = car.OrElse(new Car {Name = "audi"});
             opel.Name.ShouldBe("opel");
         }
 
@@ -35,7 +66,7 @@ namespace OptionalStyle.Tests
         public void OrElseObject()
         {
             var car = Optional<Car>.Empty();
-            var audi = car.OrElse(new Car { Name = "audi" });
+            var audi = car.OrElse(new Car {Name = "audi"});
             audi.Name.ShouldBe("audi");
         }
 
@@ -43,25 +74,25 @@ namespace OptionalStyle.Tests
         public void OrElseFunc()
         {
             var car = Optional<Car>.Empty();
-            var funcCar = car.OrElseGet(() => new Car { Name = "func car" });
+            var funcCar = car.OrElseGet(() => new Car {Name = "func car"});
             funcCar.Name.ShouldBe("func car");
         }
 
         [Fact]
         public void OrElseFuncSelf()
         {
-            var car = Optional<Car>.Of(new Car { Name = "opel" });
-            var funcCar = car.OrElseGet(() => new Car { Name = "func car" });
+            var car = Optional<Car>.Of(new Car {Name = "opel"});
+            var funcCar = car.OrElseGet(() => new Car {Name = "func car"});
             funcCar.Name.ShouldBe("opel");
         }
 
         [Fact]
         public void IfPresentCallAction()
         {
-            var car = Optional<Car>.Of(new Car { Name = "opel" });
+            var car = Optional<Car>.Of(new Car {Name = "opel"});
             car.IfPresent(_ => _.Name = "audi");
 
-            car.First().Name = "audi";
+            car.Get().Name.ShouldBe("audi");
         }
 
         [Fact]
@@ -69,7 +100,7 @@ namespace OptionalStyle.Tests
         {
             var car = Optional<Car>.Empty();
             car.IfPresent(_ => _.Name = "audi");
-            car.Any().ShouldBe(false);
+            ShouldThrowExtensions.ShouldThrow<OptionalValueNotSetException>((() => car.Get()));
         }
 
         [Fact]
@@ -87,9 +118,15 @@ namespace OptionalStyle.Tests
         }
 
         [Fact]
-        public void ValueOf_PassNull_IsPresentShouldBeNull()
+        public void Of_PassNull_ShouldThrowArgumentNullException()
         {
-            var car = Optional<Car>.Of(null);
+            ShouldThrowExtensions.ShouldThrow<ArgumentNullException>(() => Optional<Car>.Of(null));
+        }
+
+        [Fact]
+        public void OfNullable_PassNull_IsPresentShouldBeFalse()
+        {
+            var car = Optional<Car>.OfNullable(null);
             car.IsPresent().ShouldBe(false);
         }
 

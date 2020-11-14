@@ -1,29 +1,49 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OptionalStyle.exceptions;
 
 namespace OptionalStyle
 {
-    public class Optional<T> : IEnumerable<T>
+    public class Optional
     {
-        private readonly T[] _data;
+        public static Optional<T> Of<T>(T value) => Optional<T>.Of(value);
+        public static Optional<T> OfNullable<T>(T value) => Optional<T>.OfNullable(value);
+    }
+    
+    public class Optional<T>: Optional
+    {
+        private static readonly Optional<T> LocalEmpty = new Optional<T>();
+        private readonly T _value;
 
-        private Optional(T[] data)
+        private Optional()
         {
-            _data = data;
+            _value = default;
+        }
+
+        private Optional(T value)
+        {
+            _value = value;
         }
 
         public static Optional<T> Of(T value)
         {
-            return value == null ? Empty() : new Optional<T>(new[] {value});
+            if (value == null)
+            {
+                throw new ArgumentNullException();
+            }
+            return new Optional<T>(value);
+        }
+
+        public static Optional<T> OfNullable(T value)
+        {
+            return value == null ? Empty() : Of(value);
         }
 
         public static Optional<T> Empty()
         {
-            return new Optional<T>(new T[0]);
+            return LocalEmpty;
         }
+
 
         public T Get()
         {
@@ -32,29 +52,29 @@ namespace OptionalStyle
                 throw new OptionalValueNotSetException();
             }
 
-            return _data[0];
+            return _value;
         }
 
         public Optional<TResult> Map<TResult>(Func<T, TResult> mapFunc)
         {
-            return !IsPresent() ? Optional<TResult>.Empty() : Optional<TResult>.Of(mapFunc(_data[0]));
+            return !IsPresent() ? Optional<TResult>.Empty() : Optional<TResult>.Of(mapFunc(_value));
         }
 
         public async Task<Optional<TResult>> Map<TResult>(Func<T, Task<TResult>> mapFunc)
         {
-            return !IsPresent() ? Optional<TResult>.Empty() : Optional<TResult>.Of(await mapFunc(_data[0]));
+            return !IsPresent() ? Optional<TResult>.Empty() : Optional<TResult>.Of(await mapFunc(_value));
         }
 
         public bool IsPresent()
         {
-            return _data.Length > 0;
+            return _value != null;
         }
 
         public void IfPresent(Action<T> actionToPerform)
         {
             if (IsPresent())
             {
-                actionToPerform(_data[0]);
+                actionToPerform(_value);
             }
         }
 
@@ -62,23 +82,23 @@ namespace OptionalStyle
         {
             if (IsPresent())
             {
-                await actionToPerform(_data[0]);
+                await actionToPerform(_value);
             }
         }
 
         public T OrElse(T other)
         {
-            return IsPresent() ? _data[0] : other;
+            return IsPresent() ? _value : other;
         }
 
         public T OrElseGet(Func<T> function)
         {
-            return IsPresent() ? _data[0] : function();
+            return IsPresent() ? _value : function();
         }
-        
+
         public async Task<T> OrElseGet(Func<Task<T>> function)
         {
-            return IsPresent() ? _data[0] : await function();
+            return IsPresent() ? _value : await function();
         }
 
         public T OrElseThrow(Func<Exception> e)
@@ -88,17 +108,7 @@ namespace OptionalStyle
                 throw e();
             }
 
-            return _data[0];
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>) _data).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this._data.GetEnumerator();
+            return _value;
         }
     }
 }
