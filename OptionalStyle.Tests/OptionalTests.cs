@@ -12,7 +12,7 @@ namespace OptionalStyle.Tests
         [Fact]
         public void IsPresent_ShouldBeTrue()
         {
-            var car = Optional<Car>.ValueOf(new Car());
+            var car = Optional<Car>.Of(new Car());
             car.IsPresent().ShouldBe(true);
         }
 
@@ -26,7 +26,7 @@ namespace OptionalStyle.Tests
         [Fact]
         public void OrElseObjectSelf()
         {
-            var car = Optional<Car>.ValueOf(new Car { Name = "opel" });
+            var car = Optional<Car>.Of(new Car { Name = "opel" });
             var opel = car.OrElse(new Car { Name = "audi" });
             opel.Name.ShouldBe("opel");
         }
@@ -50,7 +50,7 @@ namespace OptionalStyle.Tests
         [Fact]
         public void OrElseFuncSelf()
         {
-            var car = Optional<Car>.ValueOf(new Car { Name = "opel" });
+            var car = Optional<Car>.Of(new Car { Name = "opel" });
             var funcCar = car.OrElseGet(() => new Car { Name = "func car" });
             funcCar.Name.ShouldBe("opel");
         }
@@ -58,7 +58,7 @@ namespace OptionalStyle.Tests
         [Fact]
         public void IfPresentCallAction()
         {
-            var car = Optional<Car>.ValueOf(new Car { Name = "opel" });
+            var car = Optional<Car>.Of(new Car { Name = "opel" });
             car.IfPresent(_ => _.Name = "audi");
 
             car.First().Name = "audi";
@@ -82,26 +82,26 @@ namespace OptionalStyle.Tests
         [Fact]
         public void OrElseDoesNotThrowsException()
         {
-            var car = Optional<Car>.ValueOf(new Car());
+            var car = Optional<Car>.Of(new Car());
             car.OrElseThrow(() => new Exception());
         }
 
         [Fact]
         public void ValueOf_PassNull_IsPresentShouldBeNull()
         {
-            var car = Optional<Car>.ValueOf(null);
+            var car = Optional<Car>.Of(null);
             car.IsPresent().ShouldBe(false);
         }
 
         [Fact]
         public void Map_ChangeKiaToOpel_NameShouldBeOpel()
         {
-            var car = Optional<Car>.ValueOf(new Car {Name = "kia"});
+            var car = Optional<Car>.Of(new Car {Name = "kia"});
 
             var mapKiaToOpel = car.Map(c =>
             {
                 c.Name = "opel";
-                return Optional<Car>.ValueOf(c);
+                return c;
             });
 
             mapKiaToOpel.IsPresent().ShouldBeTrue();
@@ -112,14 +112,14 @@ namespace OptionalStyle.Tests
         public void Map_MapOnEmpty_IsPresentShouldBeFalse()
         {
             var car = Optional<Car>.Empty();
-            var emptyCar = car.Map(c => Optional<Car>.ValueOf(new Car()));
+            var emptyCar = car.Map(c => Optional<Car>.Of(new Car()));
             emptyCar.IsPresent().ShouldBeFalse();
         }
 
         [Fact]
         public void Get_ReturnsCar_ShouldReturnOpel()
         {
-            var car = Optional<Car>.ValueOf(new Car {Name = "opel"});
+            var car = Optional<Car>.Of(new Car {Name = "opel"});
             car.Get().Name.ShouldBe("opel");
         }
 

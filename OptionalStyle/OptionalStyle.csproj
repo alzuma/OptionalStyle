@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description></Description>
+    <Description>Optional</Description>
     <PackageProjectUrl>https://github.com/alzuma/OptionalStyle</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/alzuma/OptionalStyle/blob/master/LICENSE</PackageLicenseUrl>
-    <Authors>alzuma</Authors>
-    <Company />
-    <Version>1.0.2</Version>
+    <Authors>Kristaps Vītoliņš</Authors>
+    <Company>SIA HotCode</Company>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>
