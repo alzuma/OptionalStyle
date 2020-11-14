@@ -14,3 +14,14 @@ public IOrientDatabaseConnection GetConnection()
     return _connection.OrElseGet(CreateConnection);
 }
 ```
+Use case #2
+Throw excelption if value is null. Thus avoid the `if` statement
+
+```csharp
+var car = Optional<Car>.OfNullable(null);
+car.Map(c =>
+{
+    c.Name = "new Car";
+    return c;
+}).OrElseThrow(() => new ArgumentException());
+```
