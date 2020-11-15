@@ -9,8 +9,8 @@ namespace OptionalStyle
         public static Optional<T> Of<T>(T value) => Optional<T>.Of(value);
         public static Optional<T> OfNullable<T>(T value) => Optional<T>.OfNullable(value);
     }
-    
-    public class Optional<T>: Optional
+
+    public class Optional<T> : Optional
     {
         private static readonly Optional<T> LocalEmpty = new Optional<T>();
         private readonly T _value;
@@ -31,6 +31,7 @@ namespace OptionalStyle
             {
                 throw new ArgumentNullException();
             }
+
             return new Optional<T>(value);
         }
 
@@ -96,6 +97,11 @@ namespace OptionalStyle
             return IsPresent() ? _value : function();
         }
 
+        public T OrElseGet(Func<T, T> function)
+        {
+            return IsPresent() ? _value : function(_value);
+        }
+
         public async Task<T> OrElseGet(Func<Task<T>> function)
         {
             return IsPresent() ? _value : await function();
@@ -110,13 +116,14 @@ namespace OptionalStyle
 
             return _value;
         }
-        
-        public T OrElseThrow<TException>() where TException: Exception, new()
+
+        public T OrElseThrow<TException>() where TException : Exception, new()
         {
             if (!IsPresent())
             {
                 throw new TException();
             }
+
             return _value;
         }
     }
