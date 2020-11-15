@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
 using OptionalStyle.exceptions;
 using OptionalStyle.Tests.model;
@@ -9,6 +10,14 @@ namespace OptionalStyle.Tests
 {
     public class OptionalTests
     {
+        [Fact]
+        public void OrElseGet_PassProducer_ShouldCreateKia()
+        {
+            static Kia CreateCar() => new Kia {Name = "kia"};
+            var car = Optional.Empty<Car>();
+            var createdCar = car.OrElseGet(CreateCar);
+            createdCar.Name.ShouldBe("kia");
+        }
         [Fact]
         public void Map_MapChainedWithExceptionFromGenericType_ShouldThrowArgumentException()
         {

@@ -8,6 +8,7 @@ namespace OptionalStyle
     {
         public static Optional<T> Of<T>(T value) => Optional<T>.Of(value);
         public static Optional<T> OfNullable<T>(T value) => Optional<T>.OfNullable(value);
+        public static Optional<T> Empty<T>() => Optional<T>.Empty();
     }
 
     public class Optional<T> : Optional
@@ -97,9 +98,9 @@ namespace OptionalStyle
             return IsPresent() ? _value : function();
         }
 
-        public T OrElseGet(Func<T, T> function)
+        public T OrElseGet<TResult>(Func<TResult> function) where TResult : T
         {
-            return IsPresent() ? _value : function(_value);
+            return IsPresent() ? _value : function();
         }
 
         public async Task<T> OrElseGet(Func<Task<T>> function)
