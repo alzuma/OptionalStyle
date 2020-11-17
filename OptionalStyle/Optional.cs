@@ -93,16 +93,6 @@ namespace OptionalStyle
             return IsPresent() ? _value : other;
         }
         
-        public T AndPostProcess(Func<T, T> function)
-        {
-            return IsPresent() ? _value : function(_value);
-        }
-        
-        public Task<T> AndPostProcess(Func<T, Task<T>> function)
-        {
-            return IsPresent() ? Task.FromResult(_value) : function(_value);
-        }
-
         public T OrElseGet(Func<T> function)
         {
             return IsPresent() ? _value : function();
